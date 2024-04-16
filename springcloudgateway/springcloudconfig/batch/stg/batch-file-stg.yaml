@@ -1,0 +1,16 @@
+cdn:
+  file-group:
+  # file size unit : MB
+  file-size: 10
+  file-allow-type:
+    img: 'png,gif,jpg,jpeg,svg,bmp,tiff'
+    doc: 'doc,pdf,xls,xlsx,ppt,pptx,pot,hwp'
+    xml: 'xml'
+    etc: 'png,gif,jpg,jpeg,svg,bmp,tiff,zip,alz,7z,rar,doc,pdf,xls,xlsx,ppt,pptx,pot,hwp,dat,tsv,txt'
+
+# spring basic 10MB -> 50MB : 프로그램 내부에서 10MB 제한
+spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB

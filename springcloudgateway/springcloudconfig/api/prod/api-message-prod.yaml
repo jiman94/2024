@@ -1,0 +1,21 @@
+result-message:
+  messages:
+    basic: '정상 처리되었습니다.'
+    test: '테스트 메세지 입니다.'
+    common.message.no.data: '데이터가 없습니다.'
+    common.message.search: '정상적으로 조회 하였습니다.'
+    common.message.insert: '정상적으로 등록 하였습니다.'
+    common.message.update: '정상적으로 수정 하였습니다.'
+    common.message.delete: '정상적으로 삭제 하였습니다.'
+    common.message.no.delete: '삭제할 데이터가 없습니다.'
+    common.message.save: '정상적으로 저장 하였습니다.'
+    common.message.not.mov: '이동이 불가능 합니다.'
+    common.message.required.data: '{0}은/는 필수 입력값 입니다.'
+    common.message.parameter.error: '파라메터 오류입니다.'
+    common.message.multi.insert: '총 {0}건(성공 {1}건, 실패 {2}건{3})'
+
+error-message:
+  messages:
+    basic: '오류입니다.'
+    common.message.error: '에러가 발생하였습니다. 관리자에게 문의하여 주십시오.'
+   

@@ -1,0 +1,4 @@
+email-info:
+  receivers:
+    - '이메일주소1'
+    - '이메일주소2'

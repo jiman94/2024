@@ -1,0 +1,33 @@
+spring:
+  mvc:
+    static-path-pattern: /static/**
+  thymeleaf:
+    cache: false
+server:
+  servlet:
+    session:
+      timeout: 2592000 # 30일
+  connection-timeout: 180000
+---    
+server:
+  tomcat:
+    remote-ip-header: x-forwarded-for
+    protocol-header: x-forwarded-proto
+---
+server:
+  tomcat:
+    max-connections: 500
+    max-threads: 400
+    min-spare-threads: 300
+    accept-count: 200
+---  
+rest:
+  max-conn-total: 200 # connection pool
+  max-conn-per-route: 10 # IP,Port 하나 당 연결 제한 갯수 / 성능테스트를 위해 임시 조정 
+  connect-timeout: 600 # second (초)
+  read-timeout: 600 # second (초)
+  
+logging:
+  level:
+    com.poc.frontend: info
+ 

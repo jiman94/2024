@@ -1,0 +1,7 @@
+result-message:
+  messages:
+    common.message.error: '에러가 발생하였습니다. 관리자에게 문의하여 주십시오.'
+
+error-message:
+  messages:
+    common.message.error: '에러가 발생하였습니다. 관리자에게 문의하여 주십시오.'

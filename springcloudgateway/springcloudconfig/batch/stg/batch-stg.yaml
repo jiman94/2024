@@ -1,0 +1,23 @@
+spring:
+
+  #springboot-starter-mail properties
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: '계정'
+    password: '비밀번호'
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          
+mybatis:
+  mapper-locations: classpath:mappers/**/*.xml
+  configuration:
+    cache-enabled: true
+    lazy-loading-enabled: true
+    multiple-result-sets-enabled: true
+    use-column-label: true
+    default-statement-timeout: 65000
+    map-underscore-to-camel-case: true

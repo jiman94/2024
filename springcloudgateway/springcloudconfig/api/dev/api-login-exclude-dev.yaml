@@ -1,0 +1,23 @@
+login-exclude:
+  common:
+    - '/'
+    - '/error'
+    - '/swagger-ui.html'
+    - '/system/v1/login'
+    - '/refresh'
+    - '/actuator/refresh'    
+    - '/swagger-resources/configuration/ui'
+    - '/swagger-resources/configuration/security'
+    - '/swagger-resources'
+    - '/webjars/springfox-swagger-ui/fonts/open-sans-v15-latin-regular.woff2'
+    - '/webjars/springfox-swagger-ui/fonts/open-sans-v15-latin-700.woff2'
+    - '/webjars/springfox-swagger-ui/fonts/source-code-pro-v7-latin-300.woff2'
+    - '/webjars/springfox-swagger-ui/fonts/source-code-pro-v7-latin-600.woff2'
+    - '/webjars/springfox-swagger-ui/fonts/titillium-web-v6-latin-regular.woff2'
+    - '/webjars/springfox-swagger-ui/fonts/titillium-web-v6-latin-regular.woff'
+
+  front:
+    - '/logout'
+  back:
+    - '/logout'
+    

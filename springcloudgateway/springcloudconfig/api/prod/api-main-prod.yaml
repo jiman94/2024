@@ -1,0 +1,10 @@
+main:
+  gnb:
+    menu.name: 'Home|Best|Review|Event'
+    menu.url: '/main/home|/main/best|/main/review|/main/event'
+    menu.homeyn: 'Y|N|N|N'
+    menu.reviewyn: 'N|N|Y|N'
+    menu.plnurl: '/main/exhibition'
+  color:
+    black: '#000000'
+    white: '#ffffff'

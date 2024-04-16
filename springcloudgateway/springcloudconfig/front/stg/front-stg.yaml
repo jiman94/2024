@@ -1,0 +1,20 @@
+zuul:
+  forceOriginalQueryStringEncoding: true
+  host:
+    connectTimeoutMillis: 180000
+    socket-timeout-millis: 180000
+    max-total-connections: 200
+    max-per-route-connections: 20
+    time-unit: MILLISECONDS
+    time-to-live: 10000
+  routes:
+    system-api:
+      path: /system/v1/**
+      url: http://api2i.stg.poc.co.kr
+      sensitiveHeaders:
+      stripPrefix: false
+    user-api:
+      path: /member/v1/**
+      url: https://api.stg.poc.co.kr
+      sensitiveHeaders:
+      stripPrefix: false
