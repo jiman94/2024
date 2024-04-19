@@ -22,3 +22,7 @@ https://github.com/signalwire/freeswitch-cluecon-lab/blob/master/docker-compose.
 
 # scale
  docker-compose up --scale wordpress=2 -d
+
+
+#### freeswitch 
+https://jiman.signalwire.com/dashboard?new_login=true
