@@ -1,0 +1,38 @@
+#!/bin/sh
+
+
+### 401 Unauthorized
+wget --http-user=signalwire --http-password=pat_6Wx1PiBuRki1kkgL7vvHVCrQ -O ./signalwire-freeswitch-repo.gpg https://freeswitch.signalwire.com/repo/deb/debian-release/signalwire-freeswitch-repo.gpg
+
+
+###
+wget -O ./signalwire-freeswitch-repo.gpg https://freeswitch.signalwire.com/repo/deb/debian-release/signalwire-freeswitch-repo.gpg
+
+
+# jiman.signalwire.com
+# ryu 
+
+
+wget --http-user=signalwire --http-password=pat_6Wx1PiBuRki1kkgL7vvHVCrQ -O ./aa.gpg https://freeswitch.signalwire.com/repo/deb/debian-prerelease/signalwire-freeswitch-repo.gpg
+
+
+
+
+###
+https://jiman.signalwire.com
+
+
+
+###
+curl https://jiman.signalwire.com/api/laml/2010-04-01/Accounts \
+    -X GET \
+    -u "eef22cbd-75a7-4058-b45d-3afb5f80fea9:PTf1c59277bdb65917eb36a918e42d5bb6b2abbde60134d751"
+
+
+
+### Start Postgres connector
+curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8083/connectors/ -d @register-postgres.json
+
+
+###
+curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8083/connectors/ -d @register-postgresql-connector.json
