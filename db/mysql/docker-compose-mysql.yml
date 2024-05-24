@@ -1,0 +1,44 @@
+version: "3.7"
+
+services:
+  mysql-db:
+
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql 
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    # volumes:
+    #   - ./data:/workspace
+      
+  mysql-sink:
+    image: mysql:8.0
+    container_name: mysql-sink
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    
+  phpmyadmin-client:
+    image: phpmyadmin:5.2.0
+    container_name: PhpMyAdmin   
+    restart: always
+    ports:
+      - 5013:80
+    environment:
+      PMA_ARBITRARY: 1

@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  mongodb-db:
+    image: mongo:4.4.2
+    container_name: MongoDB
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: chats
+    ports:
+      - 5015:27017
+    volumes:
+      - mongodb-data:/data/db
+
+  nosqlclient-client:
+    image: mongoclient/mongoclient:4.0.1
+    container_name: Nosqlclient
+    restart: always
+    depends_on:
+      - mongodb-db
+    ports:
+      - 5016:3000
+
+volumes:
+  mongodb-data:
