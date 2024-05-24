@@ -1,0 +1,26 @@
+version: '3.9'
+services:
+
+  # main 데이터베이스
+  postgresql-main:
+    container_name: postgresql-main
+    image: postgres:13
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes: 
+      - ./init/pg.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+  # standby  데이터베이스
+  postgesql-standby:
+    container_name: postgresql-standby
+    image: postgres:13
+    ports:
+      - '5433:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes: 
+      - ./init/pg.sql:/docker-entrypoint-initdb.d/create_tables.sql
