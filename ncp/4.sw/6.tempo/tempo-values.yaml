@@ -1,0 +1,78 @@
+global:
+  dnsService: 'coredns'
+  dnsNamespace: 'kube-system'
+  clusterDomain: 'cluster.local'
+global_overrides:
+  metrics_generator_processors:
+    - service-graphs
+    - span-metrics
+# serviceAccount:
+#   create: false
+#   name: tempo-distributed
+gateway:
+  enabled: true
+  replicas: 1
+  nodeSelector:
+    role: dev-ops
+storage:
+  trace:
+    backend: s3
+    s3:
+      bucket: stg-tempo-bucket
+      endpoint: kr.object.gov-ncloudstorage.com
+      insecure: true
+      access_key: 
+      secret_key: 
+
+traces:
+  otlp:
+    http:
+      enabled: true
+    grpc:
+      enabled: true
+ingester:
+  replicas: 1
+  nodeSelector:
+    role: dev-ops
+  persistence:
+    enabled: true
+  config:
+    replication_factor: 1
+distributor:
+  replicas: 1
+  config:
+    log_received_spans:
+      enabled: true
+  nodeSelector:
+    role: dev-ops
+compactor:
+  replicas: 1
+  nodeSelector:
+    role: dev-ops
+  config:
+    compaction:
+      block_retention: 336h
+memcached:
+  replicas: 1
+querier:
+  replicas: 1
+  nodeSelector:
+    role: dev-ops
+queryFrontend:
+  replicas: 1
+  nodeSelector:
+    role: dev-ops
+metricsGenerator:
+  enabled: true
+  replicas: 1
+  nodeSelector: 
+    role: dev-ops
+  config:
+    storage:
+      remote_write:
+        - url: http://kube-prometheus-stack-prometheus.prometheus.svc.cluster.local:9090/api/v1/write
+metaMonitoring:
+  serviceMonitor:
+    enabled: true
+    labels:
+      release: kube-prometheus-stack

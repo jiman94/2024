@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: stgargocd
+  namespace: argo-cd
+  annotations:
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"type":"redirection","redirection":{"port": "443","protocol":"HTTPS","statusCode":301}}'
+    alb.ingress.kubernetes.io/ssl-certificate-no: '13114'
+    alb.ingress.kubernetes.io/ssl-min-version: 'TLSV12'
+    alb.ingress.kubernetes.io/enable-http2: 'true'    
+spec:
+  ingressClassName: alb
+  rules:
+    - host: stgargocd.도메인.kr
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: argo-cd-server
+                port:
+                  number: 80

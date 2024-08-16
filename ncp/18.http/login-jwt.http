@@ -1,0 +1,9 @@
+POST localhost:8080/auth/login-jwt
+Content-Type: application/json
+
+{
+  "userSe": "USR",
+  "id": "admin",
+  "password": "1"
+}
+

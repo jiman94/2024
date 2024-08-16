@@ -1,0 +1,160 @@
+forwarder:
+  configMapFiles:
+    fluentd-inputs.conf: |
+      # HTTP input for the liveness and readiness probes
+      <source>
+        @type http
+        @label @SOURCE
+        port 9880
+      </source>    
+      # Get the logs from the containers running in the node
+      <source>
+        @type tail
+        @label @SOURCE
+        path /var/log/containers/ns-ryu-*.log , /var/log/containers/argo-cd-*.log 
+        # exclude Fluentd logs
+        exclude_path /var/log/containers/*fluentd*.log
+        pos_file /opt/bitnami/fluentd/logs/buffers/fluentd-docker.pos
+        tag kubernetes.*
+        read_from_head true
+        <parse>
+          @type multi_format
+          <pattern>
+            format regexp
+            expression /^(?<time>.+) (?<stream>stdout|stderr)( (.))? (?<log>.*)$/
+            time_format '%Y-%m-%dT%H:%M:%S.%L%z'
+            keep_time_key false
+          </pattern>
+        </parse>
+      </source>
+    fluentd-output.conf: |
+      <label @SOURCE>
+        # enrich with kubernetes metadata
+        <filter kubernetes.**>
+          @type kubernetes_metadata
+        </filter>
+        <filter kubernetes.**>
+            @type concat
+            key log
+            multiline_start_regexp /^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3})/
+            flush_interval 10
+            timeout_label "@LASTLINE"
+        </filter>
+        <match **>
+            @type relabel
+            @label @KUBERNETES
+        </match>    
+      </label>
+      <label @LASTLINE>
+        <match **>
+          @type relabel
+          @label @KUBERNETES
+        </match>
+      </label>
+
+      <label @KUBERNETES>
+        # Throw the healthcheck to the standard output instead of forwarding it
+        <match fluentd.healthcheck>
+          @type stdout
+        </match>
+        # Forward all logs to the aggregators
+        <match **>
+          @type copy
+          <store>
+            @type stdout
+          </store>
+          <store>
+            @type forward
+            <server>
+              host fluentd-headless.fluentd.svc.cluster.local
+              port 24224
+            </server>
+            <buffer>
+              @type file
+              path /opt/bitnami/fluentd/logs/buffers/logs.buffer
+              flush_thread_count 2
+              flush_interval 5s
+            </buffer>
+          </store>        
+        </match>
+      </label>
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/role
+            operator: In
+            values:
+            - api-ryu
+
+aggregator:
+  replicaCount: 1
+  configMapFiles:
+    fluentd-inputs.conf: |
+    
+      # TCP input to receive logs from
+      <source>
+        @type forward
+        @label @SOURCE
+        bind 0.0.0.0
+        port 24224
+      </source>
+
+      # HTTP input for the liveness and readiness probes
+      <source>
+        @type http
+        @label @SOURCE
+        bind 0.0.0.0
+        port 9880
+      </source>
+      
+    fluentd-output.conf: |
+      <label @SOURCE>
+        # Throw the healthcheck to the standard output
+        <match fluentd.healthcheck>
+          @type stdout
+        </match>
+
+        # Send the logs to the standard output
+        <match **>
+          # @type stdout
+          @type copy
+          <store>
+            @type stdout
+          </store>
+          <store>
+            @type loki
+            @log_level debug
+            url "http://loki-distributed-gateway.loki.svc"
+            extra_labels {"env":"dev"}
+            flush_interval 10s
+            flush_at_shutdown true
+            buffer_chunk_limit 1m
+            remove_keys docker, stream, kubernetes
+            drop_single_key true
+            <label>
+              container_name $.kubernetes.container_name
+              namespace_name $.kubernetes.namespace_name
+              container_image $.kubernetes.container_image
+              hostname $.kubernetes.pod_name
+            </label>
+          </store>
+        </match>
+      </label>
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: kubernetes.io/role
+              operator: In
+              values:
+              - api-ryu
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    labels:
+      release: kube-prometheus-stack

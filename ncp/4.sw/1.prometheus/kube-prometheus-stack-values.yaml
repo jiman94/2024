@@ -1,0 +1,25 @@
+grafana:
+  enabled: false
+prometheus:
+
+  prometheusSpec:
+    replicas: 1
+    enableRemoteWriteReceiver: true
+    nodeSelector: 
+      role: dev-ops
+    retention: 10d
+    remoteWrite:
+      - url: "http://mimir-distributed-nginx.mimir.svc:80/api/v1/push"
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: "nks-block-storage"
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+alertmanager:
+  enabled: false
+prometheusOperator:
+  nodeSelector: 
+    role: dev-ops

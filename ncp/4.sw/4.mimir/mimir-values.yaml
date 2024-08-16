@@ -1,0 +1,49 @@
+global:
+  dnsService: 'coredns'
+  dnsNamespace: 'kube-system'
+  clusterDomain: 'cluster.local'
+gateway:
+  nginx:
+    config:
+      enableIPv6: false
+  nodeSelector:
+    role: dev-ops
+minio: 
+  enabled: false
+ruler:
+  enabled: false
+alertmanager: 
+  enabled: false
+distributor:
+  replicas: 1
+  nodeSelector:
+    role: dev-ops
+ingester:
+  replicas: 2
+  nodeSelector:
+    role: dev-ops
+  zoneAwareReplication:
+    enabled: false
+querier:
+  replicas: 1
+  nodeSelector:
+    role: dev-ops
+query_scheduler:
+  replicas: 1
+  nodeSelector:
+    role: dev-ops  
+store_gateway:
+  zoneAwareReplication:
+    enabled: false
+mimir:
+  structuredConfig:
+    common:
+      storage:
+        backend: s3
+        s3:
+          bucket_name: "stg-mimir-bucket"
+          endpoint: "kr.object.gov-ncloudstorage.com"
+          access_key_id: "" # This is a secret injected via an environment variable
+          secret_access_key: "" # This is a secret injected via an environment variable
+          # http:
+          #   insecure_skip_verify: true

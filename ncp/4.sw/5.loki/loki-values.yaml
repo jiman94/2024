@@ -1,0 +1,61 @@
+global:
+  dnsService: 'coredns'
+  dnsNamespace: 'kube-system'
+  clusterDomain: 'cluster.local'
+loki:
+  storageConfig:
+    boltdb_shipper:
+      shared_store: s3
+      cache_ttl: 24h  
+    aws: 
+      s3: https://kr.object.gov-ncloudstorage.com
+      bucketnames: stg-loki-bucket
+      access_key_id: 
+      secret_access_key: 
+  schemaConfig:
+    configs:
+      - from: 2021-05-12
+        store: boltdb-shipper
+        object_store: s3
+        schema: v11
+        index:
+          prefix: loki_index_
+          period: 24h
+# serviceAccount:
+#   create: false
+#   name: loki-distributed
+ingester:
+  nodeSelector:
+    role: dev-ops
+  replicas: 1
+  maxUnavailable: 1
+  persistence:
+    enabled: true
+distributor:
+  replicas: 1
+  maxUnavailable: 1
+  nodeSelector:
+    role: dev-ops
+querier:
+  nodeSelector:
+    role: dev-ops
+  replicas: 1
+  maxUnavailable: 1
+queryFrontend:
+  nodeSelector:
+    role: dev-ops
+  replicas: 1
+  maxUnavailable: 1
+gateway:
+  replicas: 1
+  maxUnavailable: 1
+  nodeSelector:
+    role: dev-ops 
+compactor:
+  enabled: true
+  nodeSelector:
+    role: dev-ops 
+serviceMonitor:
+  enabled: true
+  labels:
+    release: kube-prometheus-stack

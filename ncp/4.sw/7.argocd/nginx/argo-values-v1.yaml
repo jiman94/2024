@@ -1,0 +1,28 @@
+nameOverride: ""
+global:
+  nodeSelector:
+    role: dev-ops
+  domain: 'stgargocd.도메인.kr'
+configs:
+  params:
+    server.insecure: true
+server:
+  name: server
+  replicas: 1
+  service:
+    type: NodePort
+  nodeSelector:
+    role: dev-ops
+  ingress:
+    enabled: true
+    annotations: 
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    ingressClassName: nginx
+    # extraHosts: 
+    #   - name: "*.kr-gov.lb.naverncp.com"
+    #     path: /
+repoServer:
+  replicas: 1
+  nodeSelector:
+    role: dev-ops

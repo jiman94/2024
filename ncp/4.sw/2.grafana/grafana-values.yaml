@@ -1,0 +1,18 @@
+initChownData:
+  enabled: false
+persistence:
+  enabled: true
+adminUser: admin
+adminPassword: "도메인"
+nodeSelector:
+  role: dev-ops
+grafana.ini:
+  feature_toggles:
+    enable: tempoSearch tempoBackendSearch tempoServiceGraph
+serviceMonitor:
+  enabled: true
+  labels:
+    release: kube-prometheus-stack
+service:
+  enabled: true
+  type: NodePort

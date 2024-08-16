@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: stggrafana-ingress
+  namespace: grafana
+  annotations:
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"type":"redirection","redirection":{"port": "443","protocol":"HTTPS","statusCode":301}}'
+    alb.ingress.kubernetes.io/ssl-certificate-no: '1'
+    alb.ingress.kubernetes.io/ssl-min-version: 'TLSV12'
+    alb.ingress.kubernetes.io/enable-http2: 'true'    
+spec:
+  ingressClassName: alb
+  rules:
+    - host: stggrafana.도메인.kr
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: grafana
+                port:
+                  number: 80
